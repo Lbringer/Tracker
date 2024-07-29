@@ -16,11 +16,11 @@ export const Login = () => {
           onClick={() => {
             navigate("/dashboard");
           }}
-          className="w-full text-sm dark:font-medium py-3 rounded bg-slate-900 dark:bg-slate-50 text-slate-50 dark:text-slate-950"
+          className="w-full text-sm dark:font-medium py-3 rounded bg-slate-950 dark:bg-slate-50 text-slate-50 dark:text-slate-950"
         >
           Submit
         </button>
-        <div className="w-full flex justify-center text-slate-900 dark:text-slate-50 mt-2 text-xs font-medium dark:font-normal">
+        <div className="w-full flex justify-center text-slate-950 dark:text-slate-50 mt-2 text-xs font-medium dark:font-normal">
           <p>Don't have an account?</p>
           <span
             className="underline font-semibold dark:font-medium ml-1 cursor-pointer"
