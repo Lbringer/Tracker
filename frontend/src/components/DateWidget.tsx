@@ -7,12 +7,16 @@ export const DateWidget = () => {
   const [isLoading, setisLoading] = useState(true);
   useEffect(() => {
     const getTemp = async () => {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=Hyderabad,in&APPID=665a6a2c8d8e02d5732f46e600b35f6c&units=metric`;
-
       try {
-        const response = await axios.get(url);
-        setTemp(response.data.main.temp);
-        setisLoading(false);
+        const response = await axios.get("https://ipapi.co/json/");
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${response.data.city},in&APPID=665a6a2c8d8e02d5732f46e600b35f6c&units=metric`;
+        try {
+          const response = await axios.get(url);
+          setTemp(response.data.main.temp);
+          setisLoading(false);
+        } catch (error) {
+          console.error("Error fetching weather data:", error);
+        }
       } catch (error) {
         console.error("Error fetching weather data:", error);
       }

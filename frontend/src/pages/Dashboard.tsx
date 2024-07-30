@@ -1,7 +1,7 @@
 import { DateWidget } from "../components/DateWidget";
-import { Expenses } from "../components/Expenses";
+import { ExpensesWidget } from "../components/ExpensesWidget";
 import { MainNav } from "../components/MainNav";
-import { Notes } from "../components/Notes";
+import { NotesWidget } from "../components/NotesWidget";
 import { TodoWidget } from "../components/TodoWidget";
 
 export const Dashboard = () => {
@@ -14,8 +14,8 @@ export const Dashboard = () => {
           <TodoWidget />
         </div>
         <div className="w-1/2 h-full flex flex-col ml-1">
-          <Expenses />
-          <Notes />
+          <ExpensesWidget />
+          <NotesWidget />
         </div>
       </div>
     </div>
