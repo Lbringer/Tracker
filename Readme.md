@@ -14,6 +14,21 @@ A simple and intuitive web application designed to help you stay organized and p
 - Create, edit, and delete notes.
 - Markdown support for better formatting of your notes.
 
+## Tech Stack
+
+**Languages**
+
+- TypeScript
+  **Frontend**
+- React
+- Tailwind CSS
+  **Backend**
+- Node.js
+- Express
+- Prisma
+  **Database**
+- PostgreSQL
+
 ## Todo (guide for smooth development)
 
 - [ ] Map out the architecure
