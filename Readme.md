@@ -19,14 +19,20 @@ A simple and intuitive web application designed to help you stay organized and p
 **Languages**
 
 - TypeScript
-  **Frontend**
+
+**Frontend**
+
 - React
 - Tailwind CSS
-  **Backend**
+
+**Backend**
+
 - Node.js
 - Express
 - Prisma
-  **Database**
+
+**Database**
+
 - PostgreSQL
 
 ## Todo (guide for smooth development)
