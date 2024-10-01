@@ -37,13 +37,12 @@ A simple and intuitive web application designed to help you stay organized and p
 
 ## Todo (guide for smooth development)
 
-- [ ] Map out the architecure
-- [ ] Create folder structure
+- [x] Create folder structure
 
 ### Backend
 
-- [ ] Initialize backend ( express , prisma )
-- [ ] Prisma schema
+- [x] Initialize backend ( express , prisma )
+- [x] Prisma schema
 - [ ] MiddleWare
 - [ ] Routes
 - [ ] Test Routes
