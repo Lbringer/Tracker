@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Router } from "express";
+import { query, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 const router = Router();
 
@@ -54,11 +54,6 @@ router.get("/:id", async (req, res) => {
       content: true,
       createdAt: true,
       updatedAt: true,
-      owner: {
-        select: {
-          username: true,
-        },
-      },
     },
   });
   if (!note) {
@@ -70,12 +65,42 @@ router.get("/:id", async (req, res) => {
   res.status(StatusCodes.OK).json(note);
 });
 
+router.get("/", async (req, res) => {
+  const prisma = new PrismaClient();
+  const queryString = req.query.queryString as string;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = 1;
+  const skip = (page - 1) * limit;
+
+  try {
+    const notes = await prisma.note.findMany({
+      where: {
+        userId: req.userId,
+        ...(queryString && {
+          content: {
+            contains: queryString,
+          },
+        }),
+      },
+      skip,
+      take: limit,
+    });
+    res.status(StatusCodes.OK).json({ notes });
+  } catch (error) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Error while fetching notes" });
+    return;
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   const id = req.params["id"];
   const prisma = new PrismaClient();
   await prisma.note.delete({
     where: {
       id,
+      userId: req.userId,
     },
   });
   res.status(StatusCodes.OK).json({ message: "Deleted" });
