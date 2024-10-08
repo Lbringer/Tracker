@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { groupBy } from "lodash";
 const router = Router();
 
 router.post("/", async (req, res) => {
@@ -42,6 +43,34 @@ router.put("/", async (req, res) => {
 });
 
 //Route which gets todays todo
+router.get("/", async (req, res) => {
+  const prisma = new PrismaClient();
+  const inputDate =
+    (req.query.queryString as string) || new Date().toISOString().split("T")[0];
+  const startDate = new Date(inputDate);
+  const endDate = new Date(
+    new Date(inputDate).setDate(startDate.getDate() + 1)
+  );
 
-//Route which gets all todo grouped by day and pagination
+  try {
+    const todo = await prisma.todo.findMany({
+      where: {
+        createdAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+        userId: req.userId,
+      },
+      select: {
+        title: true,
+        done: true,
+      },
+    });
+    res.status(StatusCodes.OK).json({ todo });
+  } catch (error) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Could not fetch todays TODO" });
+  }
+});
 export default router;

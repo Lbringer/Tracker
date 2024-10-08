@@ -69,7 +69,7 @@ router.get("/", async (req, res) => {
   const prisma = new PrismaClient();
   const queryString = req.query.queryString as string;
   const page = parseInt(req.query.page as string) || 1;
-  const limit = 1;
+  const limit = 5;
   const skip = (page - 1) * limit;
 
   try {
