@@ -1,11 +1,15 @@
+import { createNote, updateNote } from "@lbringer237/tracker-common";
 import { PrismaClient } from "@prisma/client";
-import { query, Router } from "express";
+import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 const router = Router();
 
 router.post("/", async (req, res) => {
   const prisma = new PrismaClient();
-
+  const { success } = createNote.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   try {
     const note = await prisma.note.create({
       data: {
@@ -24,7 +28,10 @@ router.post("/", async (req, res) => {
 
 router.put("/", async (req, res) => {
   const prisma = new PrismaClient();
-
+  const { success } = updateNote.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   try {
     const note = await prisma.note.update({
       where: {
@@ -97,12 +104,19 @@ router.get("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const id = req.params["id"];
   const prisma = new PrismaClient();
-  await prisma.note.delete({
-    where: {
-      id,
-      userId: req.userId,
-    },
-  });
-  res.status(StatusCodes.OK).json({ message: "Deleted" });
+  try {
+    await prisma.note.delete({
+      where: {
+        id,
+        userId: req.userId,
+      },
+    });
+    res.status(StatusCodes.OK).json({ message: "Deleted" });
+  } catch (error) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Error while deleting note" });
+    return;
+  }
 });
 export default router;

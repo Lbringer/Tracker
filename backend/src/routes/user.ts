@@ -1,3 +1,4 @@
+import { signinInput, signupInput } from "@lbringer237/tracker-common";
 import { authMiddleware } from "./../middlewares/index";
 import { PrismaClient } from "@prisma/client";
 import { Request, Router } from "express";
@@ -7,6 +8,10 @@ const router = Router();
 
 router.post("/signup", async (req, res) => {
   const prisma = new PrismaClient();
+  const { success } = signupInput.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   try {
     const user = await prisma.user.create({
       data: {
@@ -24,6 +29,10 @@ router.post("/signup", async (req, res) => {
 
 router.post("/signin", async (req, res) => {
   const prisma = new PrismaClient();
+  const { success } = signinInput.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   const user = await prisma.user.findFirst({
     where: {
       email: req.body.email,

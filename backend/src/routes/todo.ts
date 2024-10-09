@@ -1,11 +1,15 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { groupBy } from "lodash";
+import { createTodo, updateTodo } from "@lbringer237/tracker-common";
 const router = Router();
 
 router.post("/", async (req, res) => {
   const prisma = new PrismaClient();
+  const { success } = createTodo.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   try {
     const todo = await prisma.todo.create({
       data: {
@@ -24,6 +28,10 @@ router.post("/", async (req, res) => {
 });
 router.put("/", async (req, res) => {
   const prisma = new PrismaClient();
+  const { success } = updateTodo.safeParse(req.body);
+  if (!success) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+  }
   try {
     const todo = await prisma.todo.update({
       where: {
@@ -41,8 +49,6 @@ router.put("/", async (req, res) => {
       .json({ message: "Could not update todo" });
   }
 });
-
-//Route which gets todays todo
 router.get("/", async (req, res) => {
   const prisma = new PrismaClient();
   const inputDate =
