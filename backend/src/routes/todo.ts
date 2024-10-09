@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
   const { success } = createTodo.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   try {
     const todo = await prisma.todo.create({
@@ -31,6 +32,7 @@ router.put("/", async (req, res) => {
   const { success } = updateTodo.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   try {
     const todo = await prisma.todo.update({

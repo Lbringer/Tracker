@@ -11,6 +11,7 @@ router.post("/signup", async (req, res) => {
   const { success } = signupInput.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   try {
     const user = await prisma.user.create({
@@ -32,6 +33,7 @@ router.post("/signin", async (req, res) => {
   const { success } = signinInput.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   const user = await prisma.user.findFirst({
     where: {

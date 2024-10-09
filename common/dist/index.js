@@ -8,7 +8,7 @@ exports.signupInput = zod_1.z.object({
     password: zod_1.z.string(),
 });
 exports.signinInput = zod_1.z.object({
-    email: zod_1.z.string(),
+    email: zod_1.z.string().email(),
     password: zod_1.z.string(),
 });
 exports.createTodo = zod_1.z.object({

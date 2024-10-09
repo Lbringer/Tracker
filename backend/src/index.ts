@@ -8,6 +8,9 @@ app.use(express.json());
 import morgan from "morgan";
 app.use(morgan("dev"));
 
+var cors = require("cors");
+app.use(cors());
+
 import userRouter from "./routes/user";
 import todoRouter from "./routes/todo";
 import noteRouter from "./routes/note";

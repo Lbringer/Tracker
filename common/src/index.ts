@@ -8,7 +8,7 @@ export const signupInput = z.object({
 export type SignupInputType = z.infer<typeof signupInput>;
 
 export const signinInput = z.object({
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 export type SigninInputType = z.infer<typeof signinInput>;

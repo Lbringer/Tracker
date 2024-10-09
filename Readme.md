@@ -43,14 +43,14 @@ A simple and intuitive web application designed to help you stay organized and p
 
 - [x] Initialize backend ( express , prisma )
 - [x] Prisma schema
-- [ ] MiddleWare
-- [ ] Routes
-- [ ] Test Routes
+- [x] MiddleWare
+- [x] Routes
+- [x] Test Routes
 
 ### Common
 
-- [ ] Validation types and zod schema
-- [ ] Publish to npm
+- [x] Validation types and zod schema
+- [x] Publish to npm
 
 ### Frontend
 

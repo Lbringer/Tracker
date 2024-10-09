@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
   const { success } = createNote.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   try {
     const note = await prisma.note.create({
@@ -31,6 +32,7 @@ router.put("/", async (req, res) => {
   const { success } = updateNote.safeParse(req.body);
   if (!success) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
+    return;
   }
   try {
     const note = await prisma.note.update({
