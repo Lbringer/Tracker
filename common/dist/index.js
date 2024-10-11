@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateNote = exports.createNote = exports.updateTodo = exports.createTodo = exports.signinInput = exports.signupInput = void 0;
 const zod_1 = require("zod");
 exports.signupInput = zod_1.z.object({
-    usernmae: zod_1.z.string(),
+    username: zod_1.z.string(),
     email: zod_1.z.string().email(),
     password: zod_1.z.string(),
 });

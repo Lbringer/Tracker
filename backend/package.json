@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lbringer237/tracker-common": "^1.0.2",
+    "@lbringer237/tracker-common": "^1.0.4",
     "@prisma/client": "^5.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
