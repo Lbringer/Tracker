@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <div className="w-full h-full flex">
       <Sidebar name={name} />
-      <div className="w-full p-4 ml-20 lg:ml-0">Grow</div>
+      <div className="w-full py-20 px-40 lg:px-20 text-3xl">Today</div>
     </div>
   );
 };
