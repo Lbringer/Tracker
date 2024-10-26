@@ -19,7 +19,9 @@ router.post("/", async (req, res) => {
         userId: req.userId,
       },
     });
-    res.status(StatusCodes.OK).json({ id: todo.id });
+    res
+      .status(StatusCodes.OK)
+      .json({ id: todo.id, title: todo.title, done: todo.done });
     return;
   } catch (error) {
     res
@@ -72,6 +74,10 @@ router.get("/", async (req, res) => {
       select: {
         title: true,
         done: true,
+        id: true,
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     });
     res.status(StatusCodes.OK).json({ todo });

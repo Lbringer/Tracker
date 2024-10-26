@@ -5,9 +5,10 @@ export default {
     extend: {
       colors: {
         light: "#fafafa",
-        light2: "#f5f5f5",
+        lightAlt: "#d4d4d4",
         dark: "#171717",
         grey: "#525252",
+        darkAlt: "#a3a3a3",
       },
     },
   },

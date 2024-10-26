@@ -29,7 +29,7 @@ export const useSignUp = () => {
       const res = await axios.post(`${BROSWER_URL}/api/v1/user/signup`, data);
       const { token } = res.data;
       localStorage.setItem("token", token);
-      navigate("/home");
+      navigate("/home/today");
       setisLoading(false);
     } catch (error: any) {
       setisLoading(false);
@@ -56,7 +56,7 @@ export const useSignIn = () => {
       const res = await axios.post(`${BROSWER_URL}/api/v1/user/signin`, data);
       const { token } = res.data;
       localStorage.setItem("token", token);
-      navigate("/home");
+      navigate("/home/today");
       setisLoading(false);
     } catch (error: any) {
       setisLoading(false);
@@ -96,7 +96,7 @@ export const useCheckLoggedIn = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/home");
+      navigate("/home/today");
     }
   }, []);
 };

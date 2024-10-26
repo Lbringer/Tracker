@@ -1,43 +1,193 @@
-import menuIcon from "../assets/menu.svg";
-import { isSidebarOpen } from "../recoil";
-import { useRecoilState } from "recoil";
+"use client";
+import { cn } from "../utils/index";
+import { NavLink } from "react-router-dom";
+import React, { useState, createContext, useContext } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { IconMenu2, IconX } from "@tabler/icons-react";
 
-type SidebarProps = {
-  name: string;
+interface Links {
+  label: string | React.JSX.Element | React.ReactNode;
+  href: string;
+  icon: React.JSX.Element | React.ReactNode;
+  onClick?: () => void;
+}
+
+interface SidebarContextProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  animate: boolean;
+}
+
+const SidebarContext = createContext<SidebarContextProps | undefined>(
+  undefined
+);
+
+export const useSidebar = () => {
+  const context = useContext(SidebarContext);
+  if (!context) {
+    throw new Error("useSidebar must be used within a SidebarProvider");
+  }
+  return context;
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ name }) => {
-  const [isOpen, setIsOpen] = useRecoilState(isSidebarOpen);
+export const SidebarProvider = ({
+  children,
+  open: openProp,
+  setOpen: setOpenProp,
+  animate = true,
+}: {
+  children: React.ReactNode;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  animate?: boolean;
+}) => {
+  const [openState, setOpenState] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const open = openProp !== undefined ? openProp : openState;
+  const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
+
   return (
-    <div
-      className={`font-sans transform h-screen w-60 ${
-        isOpen ? "translate-x-0 bg-light2" : "-translate-x-3/4 bg-light"
-      } transition-all duration-300 ease-in-out p-4 fixed lg:static flex justify-between flex-col`}
-    >
-      <div className="flex justify-between items-center">
-        <div className="relative inline-flex items-center justify-center w-9 h-9 overflow-hidden bg-dark rounded-full">
-          <span className="text-light">{name.charAt(0)}</span>
-        </div>
-        <div>
-          <img
-            src={menuIcon}
-            alt="menu"
-            className="cursor-pointer"
-            onClick={toggleSidebar}
+    <SidebarContext.Provider value={{ open, setOpen, animate: animate }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+};
+
+export const Sidebar = ({
+  children,
+  open,
+  setOpen,
+  animate,
+}: {
+  children: React.ReactNode;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  animate?: boolean;
+}) => {
+  return (
+    <SidebarProvider open={open} setOpen={setOpen} animate={animate}>
+      {children}
+    </SidebarProvider>
+  );
+};
+
+export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
+  return (
+    <>
+      <DesktopSidebar {...props} />
+      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
+    </>
+  );
+};
+
+export const DesktopSidebar = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof motion.div>) => {
+  const { open, setOpen, animate } = useSidebar();
+  return (
+    <>
+      <motion.div
+        className={cn(
+          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-dark w-[300px] flex-shrink-0",
+          className
+        )}
+        animate={{
+          width: animate ? (open ? "300px" : "60px") : "300px",
+        }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        {...props}
+      >
+        {children}
+      </motion.div>
+    </>
+  );
+};
+
+export const MobileSidebar = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) => {
+  const { open, setOpen } = useSidebar();
+  return (
+    <>
+      <div
+        className={cn(
+          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-dark w-full"
+        )}
+        {...props}
+      >
+        <div className="flex justify-end z-20 w-full">
+          <IconMenu2
+            className="text-neutral-800 dark:text-neutral-200"
+            onClick={() => setOpen(!open)}
           />
         </div>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ x: "-100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "-100%", opacity: 0 }}
+              transition={{
+                duration: 0.3,
+                ease: "easeInOut",
+              }}
+              className={cn(
+                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                className
+              )}
+            >
+              <div
+                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                onClick={() => setOpen(!open)}
+              >
+                <IconX />
+              </div>
+              {children}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      {isOpen ? (
-        <button className="bg-dark text-light rounded text-sm px-4 py-2">
-          Logout
-        </button>
-      ) : (
-        <></>
-      )}
-    </div>
+    </>
+  );
+};
+
+export const SidebarLink = ({
+  link,
+  className,
+}: {
+  link: Links;
+  className?: string;
+}) => {
+  const { open, animate } = useSidebar();
+  return (
+    <NavLink
+      to={link.href}
+      onClick={link.onClick}
+      className={({ isActive }) =>
+        cn(
+          `flex items-center justify-start gap-2 mt-8 group/sidebar py-2 text-lightAlt ${
+            isActive ? "text-light" : ""
+          }`,
+          className
+        )
+      }
+    >
+      {link.icon}
+
+      <motion.span
+        animate={{
+          display: animate ? (open ? "inline-block" : "none") : "inline-block",
+          opacity: animate ? (open ? 1 : 0) : 1,
+        }}
+        className="text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+      >
+        {link.label}
+      </motion.span>
+    </NavLink>
   );
 };

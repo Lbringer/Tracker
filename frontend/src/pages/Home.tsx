@@ -1,19 +1,24 @@
-import { Loader } from "../compnents/Loader";
-import { Sidebar } from "../compnents/Sidebar";
-import { useWhoami } from "../hooks";
+import { Route, Routes } from "react-router-dom";
+import SidebarDisplay from "../compnents/SidebarDisplay";
+import { Today } from "../compnents/Today";
+import { cn } from "../utils";
+import { Notes } from "../compnents/Notes";
+import { Todos } from "../compnents/Todos";
 
-const Home = () => {
-  const { name } = useWhoami();
-
-  if (name == "") {
-    return <Loader />;
-  }
+export const Home = () => {
   return (
-    <div className="w-full h-full flex">
-      <Sidebar name={name} />
-      <div className="w-full py-20 px-40 lg:px-20 text-3xl">Today</div>
+    <div
+      className={cn(
+        "flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden",
+        "h-screen"
+      )}
+    >
+      <SidebarDisplay />
+      <Routes>
+        <Route path="today" element={<Today />} />
+        <Route path="notes" element={<Notes />} />
+        <Route path="todos" element={<Todos />} />
+      </Routes>
     </div>
   );
 };
-
-export default Home;
