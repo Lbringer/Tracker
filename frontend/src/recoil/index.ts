@@ -23,3 +23,15 @@ export const todaysTodos = atom<Array<Todo>>({
   key: "todaysTodos",
   default: [],
 });
+
+export type Note = {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const todaysNotes = atom<Array<Note>>({
+  key: "todaysNotes",
+  default: [],
+});

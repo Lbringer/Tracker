@@ -35,7 +35,7 @@ router.post("/signin", async (req, res) => {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid input" });
     return;
   }
-  const user = await prisma.user.findFirst({
+  const user = await prisma.user.findUnique({
     where: {
       email: req.body.email,
       password: req.body.password,

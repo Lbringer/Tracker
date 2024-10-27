@@ -3,6 +3,7 @@ import { AddTodoClicked } from "./AddTodoClicked";
 import { useRecoilValue } from "recoil";
 import { isAddTodoClicked } from "../recoil";
 import { TodaysTodos } from "./TodaysTodos";
+import { TodaysNotes } from "./TodaysNotes";
 
 export const Today = () => {
   const isClicked = useRecoilValue(isAddTodoClicked);
@@ -13,6 +14,8 @@ export const Today = () => {
       <TodaysTodos />
       <hr />
       {isClicked ? <AddTodoClicked /> : <AddTodoNotClicked />}
+      <div className="mt-20 mb-5">Notes</div>
+      <TodaysNotes />
     </div>
   );
 };

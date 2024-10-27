@@ -52,6 +52,41 @@ router.put("/", async (req, res) => {
   }
 });
 
+router.get("/today", async (req, res) => {
+  const prisma = new PrismaClient();
+  const inputDate = new Date().toISOString().split("T")[0];
+  const startDate = new Date(inputDate);
+  const endDate = new Date(
+    new Date(inputDate).setDate(startDate.getDate() + 1)
+  );
+  try {
+    const notes = await prisma.note.findMany({
+      where: {
+        updatedAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+        userId: req.userId,
+      },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+    res.status(StatusCodes.OK).json({ notes });
+  } catch (error) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Error while fetching todays notes" });
+    return;
+  }
+});
+
 router.get("/:id", async (req, res) => {
   const id = req.params["id"];
   const prisma = new PrismaClient();

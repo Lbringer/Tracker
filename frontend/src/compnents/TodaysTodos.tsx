@@ -6,7 +6,7 @@ import { BROSWER_URL } from "../config";
 import { Error } from "./Error";
 import { OneTodo } from "./OneTodo";
 import { SkeletonTodo } from "./SkeletonTodo";
-import { NoTasks } from "./NoTasks";
+import { NoData } from "./NoData";
 
 export const TodaysTodos = () => {
   const [todos, setTodos] = useRecoilState(todaysTodos);
@@ -45,16 +45,13 @@ export const TodaysTodos = () => {
     <div className="mb-5">
       {error.isVisible ? <Error errMsg={error.msg} /> : <></>}
       <div>
-        {todos.length == 0 && !isNewTodoLding ? <NoTasks /> : <></>}
+        {todos.length == 0 && !isNewTodoLding ? (
+          <NoData title="No tasks." />
+        ) : (
+          <></>
+        )}
         {todos.map((todo: Todo) => {
-          return (
-            <OneTodo
-              title={todo.title}
-              done={todo.done}
-              key={todo.id}
-              id={todo.id}
-            />
-          );
+          return <OneTodo {...todo} key={todo.id} />;
         })}
         {isNewTodoLding ? (
           <div className="animate-pulse flex items-center mb-5">

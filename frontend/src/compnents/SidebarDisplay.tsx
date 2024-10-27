@@ -16,16 +16,25 @@ const SidebarDisplay = () => {
       label: "Today",
       href: "/home/today",
       icon: <img src={todayIcon} alt="today" />,
+      onClick: () => {
+        setOpen(false);
+      },
     },
     {
       label: "Notes",
       href: "/home/notes",
       icon: <img src={notesIcon} alt="todo" />,
+      onClick: () => {
+        setOpen(false);
+      },
     },
     {
       label: "TODO's",
       href: "/home/todos",
       icon: <img src={todosIcon} alt="todo" />,
+      onClick: () => {
+        setOpen(false);
+      },
     },
     {
       label: "Logout",
