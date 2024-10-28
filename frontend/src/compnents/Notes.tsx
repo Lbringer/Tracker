@@ -1,3 +1,9 @@
+import { AddNoteBtn } from "./AddNoteBtn";
+
 export const Notes = () => {
-  return <div></div>;
+  return (
+    <div>
+      <AddNoteBtn />
+    </div>
+  );
 };

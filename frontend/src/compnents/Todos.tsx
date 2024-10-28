@@ -1,3 +1,10 @@
+import { AddNoteBtn } from "./AddNoteBtn";
+
 export const Todos = () => {
-  return <div>Todos</div>;
+  return (
+    <div>
+      <AddNoteBtn />
+      Todos
+    </div>
+  );
 };

@@ -5,7 +5,7 @@ import { cn } from "../utils";
 import { Notes } from "../compnents/Notes";
 import { Todos } from "../compnents/Todos";
 import { NoteDisplay } from "../compnents/NoteDisplay";
-import { AddNoteBtn } from "../compnents/AddNoteBtn";
+import { TextEditor } from "../compnents/TextEditor";
 export const Home = () => {
   return (
     <div
@@ -15,12 +15,12 @@ export const Home = () => {
       )}
     >
       <SidebarDisplay />
-      <AddNoteBtn />
       <Routes>
         <Route path="/today" element={<Today />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/todos" element={<Todos />} />
         <Route path="/note/:id" element={<NoteDisplay />} />
+        <Route path="/editor" element={<TextEditor />} />
       </Routes>
     </div>
   );

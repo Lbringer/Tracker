@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Note } from "../recoil";
 import axios from "axios";
 import { BROSWER_URL } from "../config";
 import { Error } from "./Error";
 import { SkeletonNoteDisplay } from "./SkeletonNoteDisplay";
+import deleteIcon from "../assets/DeleteIcon.svg";
+import { Loader } from "./Loader";
 
 export const NoteDisplay = () => {
   const { id } = useParams();
   const [note, setNote] = useState<Note>();
+  const navigate = useNavigate();
   const [error, setError] = useState<{ msg: string; isVisible: boolean }>({
     msg: "",
     isVisible: false,
   });
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   useEffect(() => {
     setisLoading(true);
     axios
@@ -39,15 +43,35 @@ export const NoteDisplay = () => {
   if (isLoading) {
     return <SkeletonNoteDisplay />;
   }
-
   const date =
     note?.createdAt.substring(0, 10) == note?.updatedAt.substring(0, 10)
       ? note?.createdAt.substring(0, 10)
       : note?.updatedAt.substring(0, 10);
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    await axios.delete(`${BROSWER_URL}/api/v1/note/${id}`, {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    navigate("/home/today");
+    setIsDeleting(false);
+  };
+  if (isDeleting) {
+    return <Loader />;
+  }
   return (
-    <div className="px-10 lg:px-44 py-10 overflow-auto">
+    <div className="px-10 lg:px-20 py-10 overflow-auto w-full">
       {error.isVisible ? <Error errMsg={error.msg} /> : <></>}
-      <div className="text-sm mb-5">{date}</div>
+      <div className="mb-5 flex items-center justify-between">
+        <div className="text-sm ">{date}</div>
+        <img
+          src={deleteIcon}
+          alt="deleteIcon"
+          onClick={handleDelete}
+          className="cursor-pointer"
+        />
+      </div>
       <div>{note?.content}</div>
     </div>
   );
