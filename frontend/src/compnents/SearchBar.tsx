@@ -23,7 +23,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onChange }) => {
         <input
           className="border-b border-b-darkAlt bg-light focus:outline-none px-4 pl-8 py-2 mb-4 placeholder:text-xs text-sm w-full"
           onChange={debouncedOnChange}
-          autoFocus
         />
       </div>
     </div>
