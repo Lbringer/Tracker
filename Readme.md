@@ -2,6 +2,8 @@
 
 A simple and intuitive web application designed to help you stay organized and productive. The application allows users to create and manage their tasks, as well as take notes, all in one place.
 
+## Link : https://tracker-d6k4.onrender.com
+
 ## Features
 
 **Todo List**
@@ -54,7 +56,7 @@ A simple and intuitive web application designed to help you stay organized and p
 
 ### Frontend
 
-- [ ] Initialize backend ( tailwind , react-router )
-- [ ] Tailwind( color , font style )
-- [ ] React-router
-- [ ] Pages
+- [x] Initialize backend ( tailwind , react-router )
+- [x] Tailwind( color , font style )
+- [x] React-router
+- [x] Pages
