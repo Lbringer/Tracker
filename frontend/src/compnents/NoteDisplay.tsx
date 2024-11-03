@@ -5,7 +5,7 @@ import axios from "axios";
 import { BROSWER_URL } from "../config";
 import { Error } from "./Error";
 import { SkeletonNoteDisplay } from "./SkeletonNoteDisplay";
-import deleteIcon from "../assets/DeleteIcon.svg";
+import deleteIcon from "../assets/deleteIcon.svg";
 import editNoteIcon from "../assets/editNoteIcon.svg";
 import { Loader } from "./Loader";
 
