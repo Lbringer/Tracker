@@ -19,7 +19,7 @@ export const TodaysTodos = () => {
   useEffect(() => {
     setisLoading(true);
     axios
-      .get(`${BROSWER_URL}/api/v1/todo`, {
+      .get(`${BROSWER_URL}/api/v1/todo/today`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },

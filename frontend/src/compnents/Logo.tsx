@@ -1,6 +1,6 @@
 const Logo = () => {
   return (
-    <div className="text-2xl text-dark fixed left-20 top-10">
+    <div className="text-2xl text-dark fixed left-8 lg:left-20 top-10">
       <span className="font-bold">Tra</span>cker
     </div>
   );

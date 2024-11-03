@@ -8,7 +8,7 @@ type BtnProps = {
 export const Btn: React.FC<BtnProps> = ({ title, onClick }) => {
   return (
     <button
-      className="bg-dark text-light w-1/2 md:w-1/4 rounded text-light text-sm px-5 py-3"
+      className="bg-dark text-light w-3/4 md:w-1/4 rounded text-light text-sm px-5 py-3"
       onClick={onClick}
     >
       {title}

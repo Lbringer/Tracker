@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import "react-quill/dist/quill.snow.css";
 import "./index.css";
 import { RecoilRoot } from "recoil";
 

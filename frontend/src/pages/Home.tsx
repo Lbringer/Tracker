@@ -21,6 +21,7 @@ export const Home = () => {
         <Route path="/todos" element={<Todos />} />
         <Route path="/note/:id" element={<NoteDisplay />} />
         <Route path="/editor" element={<TextEditor />} />
+        <Route path="/editor/:id" element={<TextEditor />} />
       </Routes>
     </div>
   );

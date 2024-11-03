@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { Note, todaysNotes } from "../recoil";
+import { useLocation, useNavigate } from "react-router-dom";
+import { allNotes, Note, todaysNotes } from "../recoil";
 import { useState } from "react";
-import deleteIcon from "../assets/DeleteIcon.svg";
+import deleteIcon from "../assets/deleteIcon.svg";
+import editNoteIcon from "../assets/editNoteIcon.svg";
 import axios from "axios";
 import { BROSWER_URL } from "../config";
 import { useRecoilState } from "recoil";
@@ -13,7 +14,11 @@ export const OneNote: React.FC<Note> = ({
   updatedAt,
 }) => {
   const navigate = useNavigate();
-  const [notes, setNotes] = useRecoilState(todaysNotes);
+  const location = useLocation();
+  console.log(location.pathname);
+  const [notes, setNotes] = useRecoilState(
+    location.pathname == "/home/today" ? todaysNotes : allNotes
+  );
   const [isHovered, setIsHovered] = useState(false);
   const handleClick = () => {
     navigate(`/home/note/${id}`);
@@ -28,13 +33,17 @@ export const OneNote: React.FC<Note> = ({
       },
     });
   };
+  const handleEdit = async (e: any) => {
+    e.stopPropagation();
+    navigate(`/home/editor/${id}`);
+  };
   const date =
     createdAt.substring(0, 10) == updatedAt.substring(0, 10)
       ? createdAt.substring(0, 10)
-      : updatedAt.substring(0, 10);
+      : "Edited: " + updatedAt.substring(0, 10);
   return (
     <div
-      className="border border-lightAlt rounded p-5 text-sm mb-5 cursor-pointer"
+      className="border border-lightAlt rounded p-5 text-sm mb-5 cursor-pointer ql-snow finalDisplay"
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -42,15 +51,29 @@ export const OneNote: React.FC<Note> = ({
       <div className={`flex items-center justify-between mb-3`}>
         <div className="text-xs text-grey mt-1 mb-1">{date}</div>
         {isHovered ? (
-          <img src={deleteIcon} alt="deleteIcon" onClick={handleDelete} />
+          <div className="flex items-start">
+            <img src={editNoteIcon} alt="editNoteIcon" onClick={handleEdit} />
+            <img
+              className="ml-2"
+              src={deleteIcon}
+              alt="deleteIcon"
+              onClick={handleDelete}
+            />
+          </div>
         ) : (
           <></>
         )}
       </div>
 
-      <div>
-        {content.length >= 1000 ? content.substring(0, 800) + "..." : content}
-      </div>
+      <div
+        className="ql-editor p-0"
+        dangerouslySetInnerHTML={{
+          __html:
+            content.length >= 1000
+              ? content.substring(0, 800) + "..."
+              : (content as string),
+        }}
+      ></div>
     </div>
   );
 };

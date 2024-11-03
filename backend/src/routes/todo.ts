@@ -2,6 +2,7 @@ import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { createTodo, updateTodo } from "@lbringer237/tracker-common";
+import { getNextDate, isValidDateString } from "../utils";
 const router = Router();
 
 router.post("/", async (req, res) => {
@@ -55,8 +56,59 @@ router.put("/", async (req, res) => {
 });
 router.get("/", async (req, res) => {
   const prisma = new PrismaClient();
-  const inputDate =
-    (req.query.queryString as string) || new Date().toISOString().split("T")[0];
+  const queryString = req.query.queryString as string;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+  try {
+    const todos = await prisma.todo.findMany({
+      where: {
+        userId: req.userId,
+        ...(queryString && {
+          OR: [
+            {
+              title: {
+                contains: queryString,
+              },
+            },
+            ...(isValidDateString(queryString)
+              ? [
+                  {
+                    createdAt: {
+                      gte: new Date(queryString),
+                      lt: getNextDate(queryString),
+                    },
+                  },
+                ]
+              : []),
+          ],
+        }),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        done: true,
+      },
+      skip,
+      take: limit,
+    });
+    res.status(StatusCodes.OK).json({ todos });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Error while fetching todos" });
+    return;
+  }
+});
+
+router.get("/today", async (req, res) => {
+  const prisma = new PrismaClient();
+  const inputDate = new Date().toISOString().split("T")[0];
   const startDate = new Date(inputDate);
   const endDate = new Date(
     new Date(inputDate).setDate(startDate.getDate() + 1)

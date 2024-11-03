@@ -2,6 +2,7 @@ import { createNote, updateNote } from "@lbringer237/tracker-common";
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import { getNextDate, isValidDateString } from "../utils";
 const router = Router();
 
 router.post("/", async (req, res) => {
@@ -113,7 +114,7 @@ router.get("/", async (req, res) => {
   const prisma = new PrismaClient();
   const queryString = req.query.queryString as string;
   const page = parseInt(req.query.page as string) || 1;
-  const limit = 5;
+  const limit = 10;
   const skip = (page - 1) * limit;
 
   try {
@@ -121,10 +122,39 @@ router.get("/", async (req, res) => {
       where: {
         userId: req.userId,
         ...(queryString && {
-          content: {
-            contains: queryString,
-          },
+          OR: [
+            {
+              content: {
+                contains: queryString,
+              },
+            },
+            ...(isValidDateString(queryString)
+              ? [
+                  {
+                    createdAt: {
+                      gte: new Date(queryString),
+                      lt: getNextDate(queryString),
+                    },
+                  },
+                  {
+                    updatedAt: {
+                      gte: new Date(queryString),
+                      lt: getNextDate(queryString),
+                    },
+                  },
+                ]
+              : []),
+          ],
         }),
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
       },
       skip,
       take: limit,
