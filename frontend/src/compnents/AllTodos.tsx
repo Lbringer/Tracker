@@ -6,7 +6,6 @@ import { BROSWER_URL } from "../config";
 import { SkeletonTodo } from "./SkeletonTodo";
 import { NoData } from "./NoData";
 import { Error } from "./Error";
-import { OneTodo } from "./OneTodo";
 import { OneTodoDetailed } from "./OneTodoDetailed";
 
 type AllTodosProps = {

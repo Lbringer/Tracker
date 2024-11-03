@@ -53,7 +53,7 @@ export const TextEditor = () => {
   });
   const navigate = useNavigate();
   const { id } = useParams();
-  const [onEdit, setisOnEdit] = useState(id ? true : false);
+  const [onEdit] = useState(id ? true : false);
 
   useEffect(() => {
     if (onEdit) {
